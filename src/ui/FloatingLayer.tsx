@@ -1,6 +1,7 @@
 import { css, cx } from '@emotion/css';
-import { memo, PropsWithChildren, useCallback } from 'react';
+import { memo, PropsWithChildren, useCallback, useEffect, useRef } from 'react';
 import { useRefFrom } from 'use-ref-from';
+import usePrevious from './hooks/internal/usePrevious';
 
 const ROOT_CSS = css({
   '&.floating-layer': {
@@ -70,10 +71,20 @@ type Props = PropsWithChildren<{
 
 const FloatingLayer = memo(({ children, dialogClassName, hasNotification, onClose, onOpen, open }: Props) => {
   const openRef = useRefFrom(open);
+  const previousOpen = usePrevious(open);
 
   const handleButtonClick = useCallback(() => (openRef.current ? onClose?.() : onOpen?.()), [openRef]);
+  const handleClose = useCallback(() => onClose?.(), [onClose]);
 
-  console.log('FloatingLayer', { open });
+  const dialogRef = useRef<HTMLDialogElement | null>(null);
+
+  useEffect(() => {
+    const { current } = dialogRef;
+
+    if (previousOpen !== open) {
+      open ? current?.show?.() : current?.close?.();
+    }
+  }, [dialogRef, open, previousOpen]);
 
   return (
     <div className={cx('floating-layer', ROOT_CSS)}>
@@ -86,7 +97,11 @@ const FloatingLayer = memo(({ children, dialogClassName, hasNotification, onClos
         <i aria-hidden="true" className="floating-layer__button-icon ms-Icon ms-Icon--ChatBot" />
         {!!hasNotification && <div className="floating-layer__notification-dot" />}
       </button>
-      <dialog className={cx('floating-layer__dialog ms-depth-8', dialogClassName)} open={open}>
+      <dialog
+        className={cx('floating-layer__dialog ms-depth-8', dialogClassName)}
+        onClose={handleClose}
+        ref={dialogRef}
+      >
         {children}
       </dialog>
     </div>
