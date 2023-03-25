@@ -1,3 +1,4 @@
+// import createDirectLine from '../../../clients/directLineWorker';
 import { createDirectLine } from 'botframework-webchat';
 import { useEffect, useMemo, useReducer } from 'react';
 
@@ -44,7 +45,8 @@ export default function useFloatingWebChatReducer(): readonly [Readonly<State>, 
           state = { ...state, initializing: true };
 
           (async function () {
-            const res = await fetch('https://webchat-mockbot.azurewebsites.net/directline/token', {
+            // const res = await fetch('https://webchat-mockbot.azurewebsites.net/directline/token', {
+            const res = await fetch('https://webchat-mockbot3.azurewebsites.net/api/token/directline', {
               method: 'POST',
               signal: abortController.signal
             });
