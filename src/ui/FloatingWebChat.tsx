@@ -25,7 +25,7 @@ const FloatingWebChat = memo(() => {
 
   return (
     <FloatingLayer open={opened} hasNotification={false} onClose={handleClose} onOpen={handleOpen}>
-      <iframe className={cx(ROOT_CSS, 'floating-web-chat')} src="/embed.html" title="Web Chat" />
+      <iframe className={cx(ROOT_CSS, 'floating-web-chat')} src="./embed.html" title="Web Chat" />
     </FloatingLayer>
   );
 });
