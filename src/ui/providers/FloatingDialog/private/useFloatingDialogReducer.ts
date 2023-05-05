@@ -8,7 +8,7 @@ type Action = typeof CloseActionType | typeof NotifyActionType | typeof OpenActi
 
 type State = {
   hasNotification: boolean;
-  initializing?: true;
+  initialized: boolean;
   opened: boolean;
   token?: string;
 };
@@ -31,12 +31,12 @@ export default function useFloatingDialogReducer(): readonly [Readonly<State>, A
       } else if (action === NotifyActionType) {
         state = state.opened ? state : { ...state, hasNotification: true };
       } else if (action === OpenActionType) {
-        state = { ...state, hasNotification: false, opened: true };
+        state = { ...state, hasNotification: false, initialized: true, opened: true };
       }
 
       return state;
     },
-    { hasNotification: false, opened: false }
+    { hasNotification: false, initialized: false, opened: false }
   );
 
   const actionCreator: ActionCreator = {

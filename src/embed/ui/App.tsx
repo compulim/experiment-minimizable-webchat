@@ -1,5 +1,5 @@
 import { Components, hooks } from 'botframework-webchat';
-import { memo, useMemo } from 'react';
+import { memo, useEffect, useMemo } from 'react';
 import { wrapWith } from 'react-wrap-with';
 
 import Spinner from './Spinner';
@@ -31,6 +31,12 @@ const Uninitialized = memo(() => {
 
 const WebChatLoader = memo(() => {
   const [directLine] = useDirectLine();
+
+  useEffect(() => {
+    window.addEventListener('message', event => {
+      console.log('!!!!!', { event });
+    });
+  }, []);
 
   return directLine ? <Initialized directLine={directLine} /> : <Uninitialized />;
 });
