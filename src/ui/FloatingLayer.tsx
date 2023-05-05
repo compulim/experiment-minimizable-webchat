@@ -32,6 +32,14 @@ const ROOT_CSS = css({
     width: 60
   },
 
+  '& .floating-layer__button:active': {
+    opacity: 0.7
+  },
+
+  '& .floating-layer__button:hover': {
+    opacity: 0.8
+  },
+
   '& .floating-layer__dialog': {
     appearance: 'none',
     backgroundColor: '#f7f7f7',

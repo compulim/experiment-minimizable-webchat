@@ -1,5 +1,3 @@
-// TODO: Moved to /common/
-
 import { useEffect, useRef } from 'react';
 
 export default function usePrevious<T>(value: T): T | undefined {

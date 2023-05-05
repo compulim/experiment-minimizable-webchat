@@ -1,20 +1,12 @@
-// import createDirectLine from '../../../clients/directLineWorker';
-import { createDirectLine } from 'botframework-webchat';
 import { useEffect, useMemo, useReducer } from 'react';
 
 const CloseActionType = Symbol('CLOSE');
 const NotifyActionType = Symbol('NOTIFY');
 const OpenActionType = Symbol('OPEN');
-const SetTokenActionType = Symbol('SET_TOKEN');
 
-type SetTokenAction = { payload: string; type: typeof SetTokenActionType };
-
-type Action = typeof CloseActionType | typeof NotifyActionType | typeof OpenActionType | SetTokenAction;
-
-type DirectLine = ReturnType<typeof createDirectLine>;
+type Action = typeof CloseActionType | typeof NotifyActionType | typeof OpenActionType;
 
 type State = {
-  directLine?: DirectLine;
   hasNotification: boolean;
   initializing?: true;
   opened: boolean;
@@ -27,7 +19,7 @@ type ActionCreator = {
   open: () => void;
 };
 
-export default function useFloatingWebChatReducer(): readonly [Readonly<State>, ActionCreator] {
+export default function useFloatingDialogReducer(): readonly [Readonly<State>, ActionCreator] {
   const abortController = useMemo(() => new AbortController(), []);
 
   useEffect(() => () => abortController.abort(), [abortController]);
@@ -40,24 +32,6 @@ export default function useFloatingWebChatReducer(): readonly [Readonly<State>, 
         state = state.opened ? state : { ...state, hasNotification: true };
       } else if (action === OpenActionType) {
         state = { ...state, hasNotification: false, opened: true };
-
-        if (!state.initializing && !state.token) {
-          state = { ...state, initializing: true };
-
-          (async function () {
-            // const res = await fetch('https://webchat-mockbot.azurewebsites.net/directline/token', {
-            const res = await fetch('https://webchat-mockbot3.azurewebsites.net/api/token/directline', {
-              method: 'POST',
-              signal: abortController.signal
-            });
-
-            res.ok && dispatch({ payload: (await res.json()).token, type: SetTokenActionType });
-          })();
-        }
-      } else if (action.type === SetTokenActionType) {
-        const { payload: token } = action;
-
-        state = { ...state, directLine: createDirectLine({ token }), token };
       }
 
       return state;

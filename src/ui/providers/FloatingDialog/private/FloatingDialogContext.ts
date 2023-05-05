@@ -1,9 +1,7 @@
 import { createContext } from 'react';
-import { createDirectLine } from 'botframework-webchat';
 
-type FloatingWebChatContextType = {
+type FloatingDialogContextType = {
   closeCallback: () => void;
-  directLineState: readonly [ReturnType<typeof createDirectLine> | undefined];
   hasNotificationState: readonly [boolean];
   notifyCallback: () => void;
   openCallback: () => void;
@@ -16,16 +14,15 @@ const PropertyThrowOnGet = {
   }
 };
 
-const defaultProperties: Record<keyof FloatingWebChatContextType, typeof PropertyThrowOnGet> = {
+const defaultProperties: Record<keyof FloatingDialogContextType, typeof PropertyThrowOnGet> = {
   closeCallback: PropertyThrowOnGet,
-  directLineState: PropertyThrowOnGet,
   hasNotificationState: PropertyThrowOnGet,
   notifyCallback: PropertyThrowOnGet,
   openCallback: PropertyThrowOnGet,
   openedState: PropertyThrowOnGet
 };
 
-const FloatingWebChatContext = createContext<FloatingWebChatContextType>(Object.create({}, defaultProperties));
+const FloatingDialogContext = createContext<FloatingDialogContextType>(Object.create({}, defaultProperties));
 
-export default FloatingWebChatContext;
-export type { FloatingWebChatContextType };
+export default FloatingDialogContext;
+export type { FloatingDialogContextType };

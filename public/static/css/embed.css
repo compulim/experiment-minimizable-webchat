@@ -1,0 +1,39 @@
+body,
+html,
+main {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+}
+
+main {
+  --spinner-icon-duration: 2s;
+  --spinner-icon-size: 32px;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.floating-web-chat__spinner-body {
+  align-items: center;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+}
+
+.floating-web-chat__spinner-icon {
+  animation-duration: var(--spinner-icon-duration);
+  animation-iteration-count: infinite;
+  animation-name: spin;
+  animation-timing-function: linear;
+  font-size: var(--spinner-icon-size);
+}
