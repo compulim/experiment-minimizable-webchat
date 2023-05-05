@@ -1,2 +1,2 @@
-// TODO: Fix DLJS.
-globalThis['window'] = globalThis;
+// // TODO: Fix DLJS.
+// globalThis['window'] = globalThis;
