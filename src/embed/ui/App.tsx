@@ -7,19 +7,18 @@ import useDirectLine from './providers/WebChatService/useDirectLine';
 import usePrevious from '../../common/hooks/internal/usePrevious';
 import WebChatServiceProvider from './providers/WebChatService/WebChatServiceProvider';
 
+import type { NotifyCallback } from '../../common/types/NotifyCallback';
+
 const { BasicWebChat, Composer } = Components;
 const { useActivities } = hooks;
 
 const Initialized = wrapWith(Composer, undefined, ['directLine'])(
-  memo(() => {
+  memo(({ onNotify }: { onNotify: NotifyCallback }) => {
     const [activities] = useActivities();
-    // TODO: Implement this and postMessage to outside.
-    // const notify = useNotifyCallback();
-    const notify = () => {};
 
     const prevActivities = usePrevious(activities);
 
-    useMemo(() => activities === prevActivities || notify(), [activities, notify, prevActivities]);
+    useMemo(() => activities === prevActivities || onNotify(), [activities, onNotify, prevActivities]);
 
     return <BasicWebChat />;
   })
@@ -29,16 +28,10 @@ const Uninitialized = memo(() => {
   return <Spinner />;
 });
 
-const WebChatLoader = memo(() => {
+const WebChatLoader = memo(({ onNotify }: { onNotify: NotifyCallback }) => {
   const [directLine] = useDirectLine();
 
-  useEffect(() => {
-    window.addEventListener('message', event => {
-      console.log('!!!!!', { event });
-    });
-  }, []);
-
-  return directLine ? <Initialized directLine={directLine} /> : <Uninitialized />;
+  return directLine ? <Initialized directLine={directLine} onNotify={onNotify} /> : <Uninitialized />;
 });
 
 export default memo(wrapWith(WebChatServiceProvider)(WebChatLoader));

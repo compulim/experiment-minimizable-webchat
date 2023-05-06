@@ -78,13 +78,12 @@ type Props = PropsWithChildren<{
 }>;
 
 const FloatingLayer = memo(({ children, dialogClassName, hasNotification, onClose, onOpen, open }: Props) => {
+  const dialogRef = useRef<HTMLDialogElement>(null);
   const openRef = useRefFrom(open);
   const previousOpen = usePrevious(open);
 
   const handleButtonClick = useCallback(() => (openRef.current ? onClose?.() : onOpen?.()), [openRef]);
   const handleClose = useCallback(() => onClose?.(), [onClose]);
-
-  const dialogRef = useRef<HTMLDialogElement | null>(null);
 
   useEffect(() => {
     const { current } = dialogRef;
@@ -93,6 +92,8 @@ const FloatingLayer = memo(({ children, dialogClassName, hasNotification, onClos
       open ? current?.show?.() : current?.close?.();
     }
   }, [dialogRef, open, previousOpen]);
+
+  console.log({ hasNotification });
 
   return (
     <div className={cx('floating-layer', ROOT_CSS)}>

@@ -17,8 +17,8 @@ const FloatingWebChatProvider = memo(({ children }: Props) => {
     const abortController = new AbortController();
 
     (async function ({ signal }) {
-      // const res = await fetch('https://webchat-mockbot.azurewebsites.net/directline/token', {
-      const res = await fetch('https://webchat-mockbot3.azurewebsites.net/api/token/directline', {
+      const res = await fetch('https://webchat-mockbot.azurewebsites.net/directline/token', {
+      // const res = await fetch('https://webchat-mockbot3.azurewebsites.net/api/token/directline', {
         method: 'POST',
         signal
       });

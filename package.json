@@ -19,7 +19,7 @@
     "botframework-webchat": "^4.15.7",
     "botframework-webchat-core": "^4.15.7",
     "core-js": "^3.29.1",
-    "message-port-rpc": "^0.0.0-main.8ed543c",
+    "message-port-rpc": "^0.0.0-main.1ff5fd7",
     "punycode": "^2.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
