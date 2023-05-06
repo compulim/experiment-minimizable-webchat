@@ -1,0 +1,12 @@
+.floating-layer__dialog {
+  appearance: none;
+  background-color: #f7f7f7;
+  border: 0;
+  border-radius: 4px;
+  box-sizing: border-box;
+  height: calc(100vh - var(--button-size) - var(--gap) - var(--body-margin) * 2);
+  overflow: hidden;
+  padding: 0;
+  position: unset;
+  width: 320px;
+}

@@ -7,7 +7,7 @@
   ],
   "scripts": {
     "build": "concurrently \"npm run build:*\"",
-    "build:esbuild": "esbuild --bundle --jsx=automatic --minify --outdir=./public/static/js/ main=./src/index.tsx directline=./src/workers/directLine/index.ts embed=./src/embed/index.tsx store=./src/workers/store/index.ts",
+    "build:esbuild": "esbuild --bundle --entry-names=[ext]/[dir] --jsx=automatic --minify --outdir=./public/static/ ./src/app/index.tsx ./src/embed/index.tsx",
     "build:typescript": "tsc -p ./src/tsconfig.json",
     "start": "concurrently --kill-others \"npm run start:*\"",
     "start:esbuild": "npm run build:esbuild -- --servedir=./public",

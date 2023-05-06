@@ -4,7 +4,7 @@ import { memo, useEffect, useRef } from 'react';
 
 import useNotifyCallback from './providers/FloatingDialog/useNotifyCallback';
 
-import type { IFrameSetupMessage } from '../common/types/IFrameSetupMessage';
+import type { IFrameSetupMessage } from '../../common/types/IFrameSetupMessage';
 
 const ROOT_CSS = css({
   '&.floating-web-chat': {

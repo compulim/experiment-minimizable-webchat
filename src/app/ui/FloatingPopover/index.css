@@ -1,0 +1,16 @@
+.webchat__floating-popover {
+  bottom: var(--body-margin);
+  display: flex;
+  flex-direction: column-reverse;
+  gap: var(--gap);
+  position: fixed;
+  right: var(--body-margin);
+
+  /* Move variables to root */
+  --body-margin: 20px;
+  --button-color: #0078d4;
+  --button-size: 60px;
+  --gap: 20px;
+  --notification-dot-color: red;
+  --notification-dot-size: 16px;
+}

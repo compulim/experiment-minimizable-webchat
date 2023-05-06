@@ -1,6 +1,6 @@
 import { Fragment, memo } from 'react';
 
-import FloatingWebChat from './FloatingWebChat';
+import FloatingWebChat from './FloatingWebChat2';
 
 const App = memo(() => (
   <Fragment>
