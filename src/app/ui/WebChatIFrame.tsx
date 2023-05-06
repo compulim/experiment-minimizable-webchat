@@ -1,8 +1,8 @@
 import { css, cx } from '@emotion/css';
-import { messagePortRPC } from 'message-port-rpc';
 import { memo, useEffect, useRef } from 'react';
+import { messagePortRPC } from 'message-port-rpc';
 
-import useNotifyCallback from './providers/FloatingDialog/useNotifyCallback';
+import useNotifyCallback from './FloatingPopover/useNotifyCallback';
 
 import type { IFrameSetupMessage } from '../../common/types/IFrameSetupMessage';
 

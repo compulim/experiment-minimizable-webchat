@@ -1,7 +1,7 @@
 import { memo } from 'react';
 
+import FloatingPopover from './FloatingPopover/FloatingPopover';
 import WebChatIFrame from './WebChatIFrame';
-import FloatingPopover from './FloatingPopover';
 
 const FloatingWebChat = memo(() => {
   return (

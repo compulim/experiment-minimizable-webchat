@@ -19,7 +19,7 @@ type ActionCreator = {
   open: () => void;
 };
 
-export default function useFloatingDialogReducer(): readonly [Readonly<State>, ActionCreator] {
+export default function useFloatingPopoverReducer(): readonly [Readonly<State>, ActionCreator] {
   const abortController = useMemo(() => new AbortController(), []);
 
   useEffect(() => () => abortController.abort(), [abortController]);

@@ -1,6 +1,6 @@
 import { createContext } from 'react';
 
-type FloatingDialogContextType = {
+type FloatingPopoverContextType = {
   closeCallback: () => void;
   hasNotificationState: readonly [boolean];
   initializedState: readonly [boolean];
@@ -15,7 +15,7 @@ const PropertyThrowOnGet = {
   }
 };
 
-const defaultProperties: Record<keyof FloatingDialogContextType, typeof PropertyThrowOnGet> = {
+const defaultProperties: Record<keyof FloatingPopoverContextType, typeof PropertyThrowOnGet> = {
   closeCallback: PropertyThrowOnGet,
   hasNotificationState: PropertyThrowOnGet,
   initializedState: PropertyThrowOnGet,
@@ -24,7 +24,7 @@ const defaultProperties: Record<keyof FloatingDialogContextType, typeof Property
   openedState: PropertyThrowOnGet
 };
 
-const FloatingDialogContext = createContext<FloatingDialogContextType>(Object.create({}, defaultProperties));
+const FloatingPopoverContext = createContext<FloatingPopoverContextType>(Object.create({}, defaultProperties));
 
-export default FloatingDialogContext;
-export type { FloatingDialogContextType };
+export default FloatingPopoverContext;
+export type { FloatingPopoverContextType };

@@ -1,19 +1,19 @@
-import './index.css';
+import './FloatingPopover.css';
 
-import FloatingDialogProvider from '../providers/FloatingDialog/FloatingDialogProvider';
-import FloatingPopoverButton from './Button';
-import FloatingPopoverDialog from './Dialog';
+import FloatingPopoverButton from './private/Button';
+import FloatingPopoverDialog from './private/Dialog';
+import FloatingPopoverProvider from './private/Provider';
 
 import type { ReactNode } from 'react';
 
 const FloatingPopover = ({ children }: { children?: ReactNode }) => {
   return (
-    <FloatingDialogProvider>
+    <FloatingPopoverProvider>
       <div className="webchat__floating-popover">
         <FloatingPopoverButton />
         <FloatingPopoverDialog>{children}</FloatingPopoverDialog>
       </div>
-    </FloatingDialogProvider>
+    </FloatingPopoverProvider>
   );
 };
 

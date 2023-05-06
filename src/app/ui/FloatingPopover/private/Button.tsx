@@ -3,10 +3,10 @@ import './Button.css';
 import { useCallback } from 'react';
 import { useRefFrom } from 'use-ref-from';
 
-import useCloseCallback from '../providers/FloatingDialog/useCloseCallback';
-import useOpenCallback from '../providers/FloatingDialog/useOpenCallback';
-import useOpened from '../providers/FloatingDialog/useOpened';
-import useHasNotification from '../providers/FloatingDialog/useHasNotification';
+import useCloseCallback from '../useCloseCallback';
+import useOpenCallback from '../useOpenCallback';
+import useOpened from '../useOpened';
+import useHasNotification from '../useHasNotification';
 
 const FloatingPopoverButton = () => {
   const [hasNotification] = useHasNotification();

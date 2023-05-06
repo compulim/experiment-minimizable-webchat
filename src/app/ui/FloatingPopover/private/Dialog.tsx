@@ -2,10 +2,10 @@ import './Dialog.css';
 
 import { useEffect, useRef } from 'react';
 
-import useCloseCallback from '../providers/FloatingDialog/useCloseCallback';
-import useInitialized from '../providers/FloatingDialog/useInitialized';
-import useOpened from '../providers/FloatingDialog/useOpened';
-import usePrevious from '../hooks/internal/usePrevious';
+import useCloseCallback from '../useCloseCallback';
+import useInitialized from '../useInitialized';
+import useOpened from '../useOpened';
+import usePrevious from '../../../../common/hooks/internal/usePrevious';
 
 import type { ReactNode } from 'react';
 
