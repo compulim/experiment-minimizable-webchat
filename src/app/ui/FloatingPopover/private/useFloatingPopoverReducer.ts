@@ -26,8 +26,6 @@ export default function useFloatingPopoverReducer(): readonly [Readonly<State>, 
 
   const [state, dispatch] = useReducer(
     (state: Readonly<State>, action: Action) => {
-      console.log(action, state);
-
       if (action === CloseActionType) {
         state = { ...state, opened: false };
       } else if (action === NotifyActionType) {

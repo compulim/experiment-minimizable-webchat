@@ -1,5 +1,6 @@
 import { Components, hooks } from 'botframework-webchat';
 import { memo, useEffect, useMemo } from 'react';
+import { messagePortRPC } from 'message-port-rpc';
 import { wrapWith } from 'react-wrap-with';
 
 import Spinner from './Spinner';
@@ -7,31 +8,46 @@ import useDirectLine from './providers/WebChatService/useDirectLine';
 import usePrevious from '../../common/hooks/internal/usePrevious';
 import WebChatServiceProvider from './providers/WebChatService/WebChatServiceProvider';
 
+import type { FocusCallback } from '../../common/types/FocusCallback';
 import type { NotifyCallback } from '../../common/types/NotifyCallback';
 
 const { BasicWebChat, Composer } = Components;
-const { useActivities } = hooks;
+const { useActivities, useFocus } = hooks;
 
-const Initialized = wrapWith(Composer, undefined, ['directLine'])(
-  memo(({ onNotify }: { onNotify: NotifyCallback }) => {
-    const [activities] = useActivities();
+const Initialized = memo(
+  wrapWith(Composer, undefined, ['directLine'])(
+    memo(({ focusPort, onNotify }: { focusPort: MessagePort; onNotify: NotifyCallback }) => {
+      const [activities] = useActivities();
+      const focus = useFocus();
 
-    const prevActivities = usePrevious(activities);
+      const prevActivities = usePrevious(activities);
 
-    useMemo(() => activities === prevActivities || onNotify(), [activities, onNotify, prevActivities]);
+      useMemo(() => activities === prevActivities || onNotify(), [activities, onNotify, prevActivities]);
 
-    return <BasicWebChat />;
-  })
+      useEffect(
+        () => messagePortRPC<FocusCallback>(focusPort, () => Promise.resolve(focus('sendBox'))).detach,
+        [focus, focusPort]
+      );
+
+      useEffect(() => focus('sendBox'), [focus]);
+
+      return <BasicWebChat />;
+    })
+  )
 );
 
 const Uninitialized = memo(() => {
   return <Spinner />;
 });
 
-const WebChatLoader = memo(({ onNotify }: { onNotify: NotifyCallback }) => {
+const WebChatLoader = memo(({ focusPort, onNotify }: { focusPort: MessagePort; onNotify: NotifyCallback }) => {
   const [directLine] = useDirectLine();
 
-  return directLine ? <Initialized directLine={directLine} onNotify={onNotify} /> : <Uninitialized />;
+  return directLine ? (
+    <Initialized directLine={directLine} focusPort={focusPort} onNotify={onNotify} />
+  ) : (
+    <Uninitialized />
+  );
 });
 
 export default memo(wrapWith(WebChatServiceProvider)(WebChatLoader));
