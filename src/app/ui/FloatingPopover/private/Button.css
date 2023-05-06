@@ -22,13 +22,3 @@
   color: white;
   font-size: 32px;
 }
-
-.webchat__floating-popover__notification-dot {
-  background-color: var(--notification-dot-color);
-  border-radius: 50%;
-  height: var(--notification-dot-size);
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: var(--notification-dot-size);
-}

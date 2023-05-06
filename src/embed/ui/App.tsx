@@ -5,34 +5,45 @@ import { wrapWith } from 'react-wrap-with';
 
 import Spinner from './Spinner';
 import useDirectLine from './providers/WebChatService/useDirectLine';
-import usePrevious from '../../common/hooks/internal/usePrevious';
 import WebChatServiceProvider from './providers/WebChatService/WebChatServiceProvider';
 
-import type { FocusCallback } from '../../common/types/FocusCallback';
-import type { NotifyCallback } from '../../common/types/NotifyCallback';
+import type { ClosePopoverCallback } from '../../common/types/ClosePopoverCallback';
+import type { FocusSendBoxCallback } from '../../common/types/FocusSendBoxCallback';
 
 const { BasicWebChat, Composer } = Components;
 const { useActivities, useFocus } = hooks;
 
 const Initialized = memo(
   wrapWith(Composer, undefined, ['directLine'])(
-    memo(({ focusPort, onNotify }: { focusPort: MessagePort; onNotify: NotifyCallback }) => {
-      const [activities] = useActivities();
-      const focus = useFocus();
+    memo(
+      ({
+        focusSendBoxPort,
+        onClosePopover
+      }: {
+        focusSendBoxPort: MessagePort;
+        onClosePopover: ClosePopoverCallback;
+      }) => {
+        const [activities] = useActivities();
+        const focus = useFocus();
 
-      const prevActivities = usePrevious(activities);
+        useMemo(() => {
+          const lastActivity = activities[activities.length - 1];
 
-      useMemo(() => activities === prevActivities || onNotify(), [activities, onNotify, prevActivities]);
+          if (lastActivity && lastActivity.type === 'message' && lastActivity.text === 'close') {
+            onClosePopover();
+          }
+        }, [activities, onClosePopover]);
 
-      useEffect(
-        () => messagePortRPC<FocusCallback>(focusPort, () => Promise.resolve(focus('sendBox'))).detach,
-        [focus, focusPort]
-      );
+        useEffect(
+          () => messagePortRPC<FocusSendBoxCallback>(focusSendBoxPort, () => Promise.resolve(focus('sendBox'))).detach,
+          [focus, focusSendBoxPort]
+        );
 
-      useEffect(() => focus('sendBox'), [focus]);
+        useEffect(() => focus('sendBox'), [focus]);
 
-      return <BasicWebChat />;
-    })
+        return <BasicWebChat />;
+      }
+    )
   )
 );
 
@@ -40,14 +51,16 @@ const Uninitialized = memo(() => {
   return <Spinner />;
 });
 
-const WebChatLoader = memo(({ focusPort, onNotify }: { focusPort: MessagePort; onNotify: NotifyCallback }) => {
-  const [directLine] = useDirectLine();
+const WebChatLoader = memo(
+  ({ focusSendBoxPort, onClosePopover }: { focusSendBoxPort: MessagePort; onClosePopover: ClosePopoverCallback }) => {
+    const [directLine] = useDirectLine();
 
-  return directLine ? (
-    <Initialized directLine={directLine} focusPort={focusPort} onNotify={onNotify} />
-  ) : (
-    <Uninitialized />
-  );
-});
+    return directLine ? (
+      <Initialized directLine={directLine} focusSendBoxPort={focusSendBoxPort} onClosePopover={onClosePopover} />
+    ) : (
+      <Uninitialized />
+    );
+  }
+);
 
 export default memo(wrapWith(WebChatServiceProvider)(WebChatLoader));

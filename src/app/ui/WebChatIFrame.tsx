@@ -2,12 +2,12 @@ import { css, cx } from '@emotion/css';
 import { memo, useEffect, useMemo, useRef } from 'react';
 import { messagePortRPC } from 'message-port-rpc';
 
-import useNotifyCallback from './FloatingPopover/useNotifyCallback';
-
-import type { IFrameSetupMessage } from '../../common/types/IFrameSetupMessage';
-import { FocusCallback } from '../../common/types/FocusCallback';
-import { NotifyCallback } from '../../common/types/NotifyCallback';
+import useCloseCallback from './FloatingPopover/useCloseCallback';
 import useOpened from './FloatingPopover/useOpened';
+
+import type { ClosePopoverCallback } from '../../common/types/ClosePopoverCallback';
+import type { FocusSendBoxCallback } from '../../common/types/FocusSendBoxCallback';
+import type { IFrameSetupMessage } from '../../common/types/IFrameSetupMessage';
 
 const ROOT_CSS = css({
   '&.floating-web-chat': {
@@ -19,11 +19,11 @@ const ROOT_CSS = css({
 
 const WebChatIFrame = memo(() => {
   const [opened] = useOpened();
-  const focusCallbackRef = useRef<FocusCallback | null>(null);
-  const handleNotify = useNotifyCallback();
+  const focusSendBoxCallbackRef = useRef<FocusSendBoxCallback | null>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  const close = useCloseCallback();
 
-  useMemo(() => opened && focusCallbackRef.current?.(), [focusCallbackRef, opened]);
+  useMemo(() => opened && focusSendBoxCallbackRef.current?.(), [focusSendBoxCallbackRef, opened]);
 
   useEffect(() => {
     const { current: iframe } = iframeRef;
@@ -32,28 +32,31 @@ const WebChatIFrame = memo(() => {
       return;
     }
 
-    const { port1: focusPort1, port2: focusPort2 } = new MessageChannel();
-    const { port1: notifyPort1, port2: notifyPort2 } = new MessageChannel();
+    const { port1: closePopoverPort1, port2: closePopoverPort2 } = new MessageChannel();
+    const { port1: focusSendBoxPort1, port2: focusSendBoxPort2 } = new MessageChannel();
 
-    messagePortRPC<NotifyCallback>(notifyPort1, () => Promise.resolve(handleNotify()));
-    focusCallbackRef.current = messagePortRPC<FocusCallback>(focusPort1);
+    messagePortRPC<ClosePopoverCallback>(closePopoverPort1, () => Promise.resolve(close()));
+    focusSendBoxCallbackRef.current = messagePortRPC<FocusSendBoxCallback>(focusSendBoxPort1);
 
     const handleLoad = () => {
-      const setupMessage: IFrameSetupMessage = { focusPort: focusPort2, notifyPort: notifyPort2 };
+      const setupMessage: IFrameSetupMessage = {
+        closePopoverPort: closePopoverPort2,
+        focusSendBoxPort: focusSendBoxPort2
+      };
 
       // Only post to same origin.
-      iframe.contentWindow?.postMessage(setupMessage, location.origin, [focusPort2, notifyPort2]);
+      iframe.contentWindow?.postMessage(setupMessage, location.origin, [closePopoverPort2, focusSendBoxPort2]);
     };
 
     iframe.addEventListener('load', handleLoad);
 
     return () => {
-      notifyPort1.close();
-      notifyPort2.close();
+      closePopoverPort1.close();
+      closePopoverPort2.close();
 
       iframe.removeEventListener('load', handleLoad);
     };
-  }, [focusCallbackRef, handleNotify, iframeRef]);
+  }, [focusSendBoxCallbackRef, close, iframeRef]);
 
   return <iframe className={cx(ROOT_CSS, 'floating-web-chat')} ref={iframeRef} src="./embed.html" title="Web Chat" />;
 });

@@ -2,9 +2,7 @@ import { createContext } from 'react';
 
 type FloatingPopoverContextType = {
   closeCallback: () => void;
-  hasNotificationState: readonly [boolean];
   initializedState: readonly [boolean];
-  notifyCallback: () => void;
   openCallback: () => void;
   openedState: readonly [boolean];
 };
@@ -17,9 +15,7 @@ const PropertyThrowOnGet = {
 
 const defaultProperties: Record<keyof FloatingPopoverContextType, typeof PropertyThrowOnGet> = {
   closeCallback: PropertyThrowOnGet,
-  hasNotificationState: PropertyThrowOnGet,
   initializedState: PropertyThrowOnGet,
-  notifyCallback: PropertyThrowOnGet,
   openCallback: PropertyThrowOnGet,
   openedState: PropertyThrowOnGet
 };
