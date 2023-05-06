@@ -1,0 +1,14 @@
+body,
+html,
+main {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+}
+
+main {
+  --spinner-icon-duration: 2s;
+  --spinner-icon-size: 32px;
+}

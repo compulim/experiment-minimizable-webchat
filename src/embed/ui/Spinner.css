@@ -1,19 +1,4 @@
-body,
-html,
-main {
-  height: 100%;
-}
-
-body {
-  margin: 0;
-}
-
-main {
-  --spinner-icon-duration: 2s;
-  --spinner-icon-size: 32px;
-}
-
-@keyframes spin {
+@keyframes webchat__animation__spin {
   from {
     transform: rotate(0);
   }
@@ -23,17 +8,17 @@ main {
   }
 }
 
-.floating-web-chat__spinner-body {
+.webchat-float__spinner-body {
   align-items: center;
   display: flex;
   height: 100%;
   justify-content: center;
 }
 
-.floating-web-chat__spinner-icon {
+.webchat-float__spinner-icon {
   animation-duration: var(--spinner-icon-duration);
   animation-iteration-count: infinite;
-  animation-name: spin;
+  animation-name: webchat__animation__spin;
   animation-timing-function: linear;
   font-size: var(--spinner-icon-size);
 }

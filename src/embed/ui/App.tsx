@@ -1,5 +1,7 @@
+import './App.css';
+
 import { Components, hooks } from 'botframework-webchat';
-import { memo, useEffect, useMemo } from 'react';
+import { memo, useCallback, useEffect } from 'react';
 import { messagePortRPC } from 'message-port-rpc';
 import { wrapWith } from 'react-wrap-with';
 
@@ -9,9 +11,10 @@ import WebChatServiceProvider from './providers/WebChatService/WebChatServicePro
 
 import type { ClosePopoverCallback } from '../../common/types/ClosePopoverCallback';
 import type { FocusSendBoxCallback } from '../../common/types/FocusSendBoxCallback';
+import type { KeyboardEventHandler } from 'react';
 
 const { BasicWebChat, Composer } = Components;
-const { useActivities, useFocus } = hooks;
+const { useFocus } = hooks;
 
 const Initialized = memo(
   wrapWith(Composer, undefined, ['directLine'])(
@@ -23,13 +26,15 @@ const Initialized = memo(
         focusSendBoxPort: MessagePort;
         onClosePopover: ClosePopoverCallback;
       }) => {
-        const [activities] = useActivities();
         const focus = useFocus();
-        const lastActivity = activities[activities.length - 1];
 
-        useMemo(
-          () => lastActivity && lastActivity.type === 'message' && lastActivity.text === 'close' && onClosePopover(),
-          [lastActivity, onClosePopover]
+        const handleKeyDown = useCallback<KeyboardEventHandler<HTMLDivElement>>(
+          ({ key }) =>
+            // TODO: Web Chat should have a way to emit event for Escape key in send box.
+            key === 'Escape' &&
+            document.activeElement?.classList.contains('webchat__send-box-text-box__input') &&
+            onClosePopover(),
+          [onClosePopover]
         );
 
         useEffect(
@@ -39,15 +44,15 @@ const Initialized = memo(
 
         useEffect(() => focus('sendBox'), [focus]);
 
-        return <BasicWebChat />;
+        return (
+          <div className="webchat-float__embed-container" onKeyDown={handleKeyDown}>
+            <BasicWebChat />
+          </div>
+        );
       }
     )
   )
 );
-
-const Uninitialized = memo(() => {
-  return <Spinner />;
-});
 
 const WebChatLoader = memo(
   ({ focusSendBoxPort, onClosePopover }: { focusSendBoxPort: MessagePort; onClosePopover: ClosePopoverCallback }) => {
@@ -56,7 +61,7 @@ const WebChatLoader = memo(
     return directLine ? (
       <Initialized directLine={directLine} focusSendBoxPort={focusSendBoxPort} onClosePopover={onClosePopover} />
     ) : (
-      <Uninitialized />
+      <Spinner />
     );
   }
 );
