@@ -44,7 +44,6 @@ const WebChatIFrame = memo(() => {
         focusSendBoxPort: focusSendBoxPort2
       };
 
-      // Only post to same origin.
       iframe.contentWindow?.postMessage(setupMessage, location.origin, [closePopoverPort2, focusSendBoxPort2]);
     };
 

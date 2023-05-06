@@ -1,12 +1,14 @@
 import './FloatingPopover.css';
 
+import { memo } from 'react';
+
 import FloatingPopoverButton from './private/Button';
 import FloatingPopoverDialog from './private/Dialog';
 import FloatingPopoverProvider from './private/Provider';
 
 import type { ReactNode } from 'react';
 
-const FloatingPopover = ({ children }: { children?: ReactNode }) => {
+const FloatingPopover = memo(({ children }: { children?: ReactNode }) => {
   return (
     <FloatingPopoverProvider>
       <div className="webchat__floating-popover">
@@ -15,6 +17,6 @@ const FloatingPopover = ({ children }: { children?: ReactNode }) => {
       </div>
     </FloatingPopoverProvider>
   );
-};
+});
 
 export default FloatingPopover;
