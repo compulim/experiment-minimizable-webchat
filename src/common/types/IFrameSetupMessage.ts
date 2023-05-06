@@ -1,4 +1,8 @@
 export type IFrameSetupMessage = {
-  focusSendBoxPort: MessagePort;
   closePopoverPort: MessagePort;
+  focusSendBoxPort: MessagePort;
+
+  // TODO: More things to send.
+  //       - CSS stylesheet for override
+  //       - Language
 };
