@@ -25,14 +25,12 @@ const Initialized = memo(
       }) => {
         const [activities] = useActivities();
         const focus = useFocus();
+        const lastActivity = activities[activities.length - 1];
 
-        useMemo(() => {
-          const lastActivity = activities[activities.length - 1];
-
-          if (lastActivity && lastActivity.type === 'message' && lastActivity.text === 'close') {
-            onClosePopover();
-          }
-        }, [activities, onClosePopover]);
+        useMemo(
+          () => lastActivity && lastActivity.type === 'message' && lastActivity.text === 'close' && onClosePopover(),
+          [lastActivity, onClosePopover]
+        );
 
         useEffect(
           () => messagePortRPC<FocusSendBoxCallback>(focusSendBoxPort, () => Promise.resolve(focus('sendBox'))).detach,

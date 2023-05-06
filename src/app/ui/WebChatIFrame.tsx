@@ -19,9 +19,9 @@ const ROOT_CSS = css({
 
 const WebChatIFrame = memo(() => {
   const [opened] = useOpened();
+  const close = useCloseCallback();
   const focusSendBoxCallbackRef = useRef<FocusSendBoxCallback | null>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const close = useCloseCallback();
 
   useMemo(() => opened && focusSendBoxCallbackRef.current?.(), [focusSendBoxCallbackRef, opened]);
 
@@ -54,9 +54,12 @@ const WebChatIFrame = memo(() => {
       closePopoverPort1.close();
       closePopoverPort2.close();
 
+      focusSendBoxPort1.close();
+      focusSendBoxPort2.close();
+
       iframe.removeEventListener('load', handleLoad);
     };
-  }, [focusSendBoxCallbackRef, close, iframeRef]);
+  }, [close, focusSendBoxCallbackRef, iframeRef]);
 
   return <iframe className={cx(ROOT_CSS, 'floating-web-chat')} ref={iframeRef} src="./embed.html" title="Web Chat" />;
 });
