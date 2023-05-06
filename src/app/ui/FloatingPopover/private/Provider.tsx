@@ -21,7 +21,7 @@ const FloatingDialogProvider = memo(({ children }: Props) => {
       openCallback: open,
       openedState
     }),
-    [close, openedState, open]
+    [close, initializedState, openedState, open]
   );
 
   return <FloatingPopoverContext.Provider value={context}>{children}</FloatingPopoverContext.Provider>;

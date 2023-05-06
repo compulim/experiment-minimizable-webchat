@@ -5,7 +5,7 @@ import FloatingWebChat from './FloatingWebChat';
 const App = memo(() => (
   <Fragment>
     <h1>Hello, World!</h1>
-    <a href=".">Open self</a>
+    <a href="." target="_blank">Open self</a>
     <FloatingWebChat />
   </Fragment>
 ));
